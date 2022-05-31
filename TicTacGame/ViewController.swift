@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  TicTacGame
 //
-//  Created by Macmini M1 on 27/05/22.
+//  Created by Mayank on 27/05/22.
 //
 
 import UIKit
@@ -28,15 +28,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblWinPlayerMessage: UILabel!
     
   
-    var firstTurn =   UserTurn.cross
-    var currentTurn =  UserTurn.cross
+    var firstMove =   UserTurn.cross
+    var currentMove =  UserTurn.cross
     
     var arrButtons = [UIButton]()
-    var lastMove: UIButton?
+    var finalMove: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addSwipeGesture()
+        SwipeGesture()
         becomeFirstResponder()
         updateResult()
     }
@@ -55,17 +55,16 @@ class ViewController: UIViewController {
     }
     
     
-    //Action: Tap Action
-    @IBAction func btnActionTap(_ sender: UIButton) {
+    @IBAction func ActionTapBtn(_ sender: UIButton) {
         
         if (sender.currentTitle == "" || sender.currentTitle == nil) && lblWinPlayerMessage.text == "" {
             var title = ""
-            if currentTurn == .nought{
+            if currentMove == .nought{
                 title = "X"
-                currentTurn = .cross
+                currentMove = .cross
             }else{
                 title = "O"
-                currentTurn = .nought
+                currentMove = .nought
             }
             
             for btn in arrButtons {
@@ -77,26 +76,26 @@ class ViewController: UIViewController {
                 }
             }
             
-            if checkForResult("X") {
-                lblWinPlayerMessage.text = "X player win the game"
-                playerXScrore = playerXScrore + 1
+            if checkResult("X") {
+                lblWinPlayerMessage.text = "Yipeee! User X wins."
+                UserXScore = UserXScore + 1
                 updateResult()
                 return
             }
             
-            if checkForResult("O") {
-                lblWinPlayerMessage.text = "O player win the game"
-               playerOScrore = playerOScrore + 1
+            if checkResult("O") {
+                lblWinPlayerMessage.text = "Yipeee! User O wins."
+               UserOScore = UserOScore + 1
                 updateResult()
                 return
             }
             
-            if checkForEvenState() {
-                lblWinPlayerMessage.text = "Even state"
+            if checkEvenState() {
+                lblWinPlayerMessage.text = "Even state."
                 return
             }
             
-            lastMove = sender
+            finalMove = sender
         }
     }
    
@@ -112,27 +111,27 @@ class ViewController: UIViewController {
     }
     
     
-    func resetGame() {
+    func gamereset() {
         for btn in arrButtons {
             btn.setTitle("", for: .normal)
            
         }
-        firstTurn =   UserTurn.cross
-        currentTurn =  UserTurn.cross
+        firstMove =   UserTurn.cross
+        currentMove =  UserTurn.cross
         lblWinPlayerMessage.text = ""
         
     }
     
     func undoLastMove() {
-        if lastMove?.currentTitle != "" {
-            lastMove?.setTitle("", for: .normal)
-            currentTurn = currentTurn == .cross ? .nought : .cross
+        if finalMove?.currentTitle != "" {
+            finalMove?.setTitle("", for: .normal)
+            currentMove = currentMove == .cross ? .nought : .cross
         }
        
     }
     
     
-    func checkForResult(_ s: String) -> Bool {
+    func checkResult(_ s: String) -> Bool {
         if checkSymbol(btn1, s) && checkSymbol(btn2, s) && checkSymbol(btn3, s) {
             return  true
         }
@@ -179,7 +178,7 @@ class ViewController: UIViewController {
         return btn.title(for: .normal) == symbol
     }
     
-    func checkForEvenState() -> Bool{
+    func checkEvenState() -> Bool{
         var count = 0
         for btn in arrButtons {
             if btn.currentTitle?.count ?? 0 > 0 {
@@ -194,7 +193,7 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: "Tic Tac Toc Game", message: message, preferredStyle: .alert)
         
         let btnOk = UIAlertAction(title: "Ok", style: .default) { _ in
-            self.resetGame()
+            self.gamereset()
         }
         alert.addAction(btnOk)
         self.present(alert, animated: true) {
@@ -204,14 +203,14 @@ class ViewController: UIViewController {
     
     
     func updateResult() {
-        lblPlayerO.text = "\(playerOScrore)"
-        lblPlayerX.text = "\(playerXScrore)"
+        lblPlayerO.text = "\(UserOScore)"
+        lblPlayerX.text = "\(UserXScore)"
     }
     
 }
 
 extension ViewController {
-    func addSwipeGesture() {
+    func SwipeGesture() {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
         swipeDown.direction = .down
         self.view.addGestureRecognizer(swipeDown)
@@ -226,7 +225,7 @@ extension ViewController {
             let alert = UIAlertController(title: "Tic Tac Toc Game", message: "Do you want to reset game?", preferredStyle: .alert)
             
             let btnOk = UIAlertAction(title: "Yes", style: .destructive) { _ in
-                self.resetGame()
+                self.gamereset()
             }
             let btnCancel = UIAlertAction(title: "No", style: .cancel) { _ in
               
@@ -240,6 +239,7 @@ extension ViewController {
     }
     
 }
+
 //Check motion
 extension ViewController {
     
@@ -255,7 +255,7 @@ extension ViewController {
 }
 
 extension ViewController {
-    var playerXScrore: Int {
+    var UserXScore: Int {
         set {
             UserDefaults.standard.setValue(newValue, forKey: "x")
         }
@@ -263,7 +263,7 @@ extension ViewController {
             return UserDefaults.standard.value(forKey: "x") as? Int ?? 0
         }
     }
-    var playerOScrore: Int {
+    var UserOScore: Int {
         set {
             UserDefaults.standard.setValue(newValue, forKey: "o")
         }

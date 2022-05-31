@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  TicTacGame
 //
-//  Created by Macmini M1 on 27/05/22.
+//  Created by Mayank on 27/05/22.
 //
 
 import UIKit
