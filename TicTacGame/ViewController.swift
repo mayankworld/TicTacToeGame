@@ -55,8 +55,8 @@ class ViewController: UIViewController {
     }
     
     
-    //Action: Tap Action
-    @IBAction func btnActionTap(_ sender: UIButton) {
+    @IBAction func ActionTapBtn(_ sender: UIButton) {
+    
         
         if (sender.currentTitle == "" || sender.currentTitle == nil) && lblWinPlayerMessage.text == "" {
             var title = ""
@@ -96,6 +96,7 @@ class ViewController: UIViewController {
             
             if checkForEvenState() {
                 lblWinPlayerMessage.text = "Even state"
+                alert(message: "DRAW")
                 return
             }
             
